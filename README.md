@@ -1,16 +1,9 @@
-# lightmanga
+# LightManga
 
-A new Flutter project.
+### A Flutter project for Manga and Light Novel lovers. <br>
+Using an API from Manga Scrapper for Asura Scans Website in rapidapi.com
 
-## Getting Started
+![image](https://user-images.githubusercontent.com/81351757/153890001-a81fee70-03ba-4b51-af52-8ff3d647134d.png)
+![image](https://user-images.githubusercontent.com/81351757/153890039-7622cfe7-ced0-4ef6-ac9f-a82d5c3dfe21.png)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
