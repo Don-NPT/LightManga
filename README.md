@@ -4,8 +4,8 @@
 Using an API from Manga Scrapper for Asura Scans Website in rapidapi.com <br>
 (Because the database is not ready, so we tried using information from API instead)
 <br> <br> 
-Please put your api-key in manga_page.dart and lightnovel_page.dart <br>
-My API-KEY was provided in MyCourse.
+To run the app, please put your api-key in manga_page.dart and lightnovel_page.dart <br>
+For teacher, my API-KEY was provided in MyCourse.
 <br>
 ### This is manga page and its detail page
 ![image](https://user-images.githubusercontent.com/81351757/154665501-f596932f-6352-4a12-ac58-c336e1ae4b46.png)
