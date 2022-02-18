@@ -2,13 +2,21 @@
 
 ### A Flutter project for Manga and Light Novel lovers. <br>
 Using an API from Manga Scrapper for Asura Scans Website in rapidapi.com <br>
-v2
-![image](https://user-images.githubusercontent.com/81351757/154004058-b5145194-d0df-40f5-a443-82d105912597.png)
+(Because the database is not ready, so we tried using information from API instead)
+<br>
+This is manga page and its detail page
+<br>
+![image](https://user-images.githubusercontent.com/81351757/154665501-f596932f-6352-4a12-ac58-c336e1ae4b46.png)
+![image](https://user-images.githubusercontent.com/81351757/154665568-43fed41a-0d4d-4bbf-b26d-481eebfc99f9.png)
+<br>
+This is light novel page and its website
+<br>
+![image](https://user-images.githubusercontent.com/81351757/154665623-0b401927-9f4c-44de-bf53-658073e0779e.png)
+![image](https://user-images.githubusercontent.com/81351757/154665685-c0270bad-1f4e-4c30-89ea-2e3189c631c1.png)
+<br>
+This is map page
+<br>
+![image](https://user-images.githubusercontent.com/81351757/154665744-a37d668c-c230-4935-8c95-8d7988fb3016.png)
 
-
-
-v1
-![image](https://user-images.githubusercontent.com/81351757/153890001-a81fee70-03ba-4b51-af52-8ff3d647134d.png)
-![image](https://user-images.githubusercontent.com/81351757/153890039-7622cfe7-ced0-4ef6-ac9f-a82d5c3dfe21.png)
 
 
