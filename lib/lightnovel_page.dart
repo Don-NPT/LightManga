@@ -10,7 +10,7 @@ Future<List<LightNovel>> getNovel() async {
   const Map<String, String> _headers = {
     "content-type": "application/json",
     "x-rapidapi-host": "upcoming-light-novels.p.rapidapi.com",
-    "x-rapidapi-key": "9489183d43mshe8516f5a6ccea65p13fe37jsn30787f2b9310",
+    "x-rapidapi-key": "YOUR-API-KEY",
   };
 
   Response response = await get(
