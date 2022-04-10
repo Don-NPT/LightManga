@@ -64,29 +64,67 @@ class LightNovelDetail extends StatelessWidget {
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     )),
-                SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+
+                SizedBox(
+                    width: 300,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(children: [
-                          for (var i = 0; i < lightnovel['tag'].length; i++)
-                            Container(
-                                height: 30,
-                                decoration: const BoxDecoration(
-                                    color: Color.fromARGB(255, 204, 242, 255),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 10),
-                                margin: const EdgeInsets.all(3),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(lightnovel['tag'][i]),
-                                )),
-                        ]),
+                        Wrap(
+                            direction: Axis.horizontal,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              for (var i = 0; i < lightnovel['tag'].length; i++)
+                                Container(
+                                    height: 30,
+                                    decoration: const BoxDecoration(
+                                        color:
+                                            Color.fromARGB(255, 204, 242, 255),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 0, horizontal: 10),
+                                    margin: const EdgeInsets.all(3),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(lightnovel['tag'][i]),
+                                    )),
+                            ]),
                       ],
                     )),
+
+                // SizedBox(
+                //   height: 20,
+                //   child: ListView.builder(
+                //       scrollDirection: Axis.horizontal,
+                //       physics: const NeverScrollableScrollPhysics(),
+                //       shrinkWrap: true,
+                //       itemCount: lightnovel['tag'].length,
+                //       itemBuilder: (BuildContext context, int index) {
+                //         return Row(
+                //           children: [
+                //             Container(
+                //                 height: 200,
+                //                 decoration: BoxDecoration(
+                //                     border: Border.all(
+                //                       color: Colors.cyan,
+                //                     ),
+                //                     borderRadius: const BorderRadius.all(
+                //                         Radius.circular(20))),
+                //                 padding: const EdgeInsets.symmetric(
+                //                     vertical: 0, horizontal: 6),
+                //                 child: Align(
+                //                   alignment: Alignment.center,
+                //                   child: Text(lightnovel['tag'][index]),
+                //                 )),
+                //             const SizedBox(
+                //               width: 10,
+                //             )
+                //           ],
+                //         );
+                //       }),
+                // ),
                 ListTile(
                   title: const Text("Author",
                       textAlign: TextAlign.center,
@@ -103,14 +141,6 @@ class LightNovelDetail extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                    )),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(lightnovel['volume'].toString(),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18,
                     )),
                 const SizedBox(
                   height: 10,

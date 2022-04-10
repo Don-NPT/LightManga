@@ -1,82 +1,80 @@
-import 'dart:convert';
-
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:lightmanga/lightnovel_object.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-Future<List<LightNovel>> getNovel() async {
-  // Base headers for Response url
-  const Map<String, String> _headers = {
-    "content-type": "application/json",
-    "x-rapidapi-host": "upcoming-light-novels.p.rapidapi.com",
-    "x-rapidapi-key": "9489183d43mshe8516f5a6ccea65p13fe37jsn30787f2b9310",
-  };
-
-  Response response = await get(
-      Uri.parse('https://upcoming-light-novels.p.rapidapi.com/lns/yenpress'),
-      headers: _headers);
-
-  if (response.statusCode == 200) {
-    List<dynamic> body = jsonDecode(response.body);
-
-    List<LightNovel> novels =
-        body.map((dynamic item) => LightNovel.fromJson(item)).toList();
-
-    return novels;
-  } else {
-    throw Exception('Failed to load novels');
-  }
-}
-
-_launchURL(String url) async {
-  // const url = 'https://www.google.com';
-  if (await canLaunch(url)) {
-    await launch(url, forceWebView: true);
-  } else {
-    throw 'Could not launch $url';
-  }
-}
+import 'lightnovel_detail.dart';
 
 class LightNovelPage extends StatefulWidget {
   const LightNovelPage({Key? key}) : super(key: key);
 
   @override
-  _LightNovelPageState createState() => _LightNovelPageState();
+  State<LightNovelPage> createState() => _LightNovelPageState();
 }
 
 class _LightNovelPageState extends State<LightNovelPage> {
-  late Future<List<LightNovel>> futureNovel;
+  // DatabaseReference ref = FirebaseDatabase.instance.ref("novel");
+  var ref = FirebaseDatabase.instance.reference().child('novel');
 
-  @override
-  void initState() {
-    super.initState();
-    futureNovel = getNovel();
+  var searchState = false;
+  var searchQuery = "";
+
+  void _toggleSearch() {
+    setState(() {
+      searchState = !searchState;
+    });
+  }
+
+  void _searchQuery(String text) {
+    setState(() {
+      searchQuery = text;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 204, 242, 255),
       appBar: AppBar(
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
-          Icon(
-            Icons.book,
-            color: Colors.cyan,
-          ),
-          Text(
-            '  LightManga',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
-          ),
-        ]),
-        backgroundColor: Colors.white,
+        title: !searchState
+            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                Icon(
+                  Icons.book,
+                  color: Colors.cyan,
+                ),
+                Text(
+                  '  LightManga',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w400),
+                ),
+              ])
+            : TextField(
+                decoration: const InputDecoration(
+                    icon: Icon(Icons.search),
+                    hintText: "Search...",
+                    hintStyle: TextStyle(color: Colors.white)),
+                onChanged: (text) {
+                  _searchQuery(text);
+                },
+              ),
+        backgroundColor: const Color.fromARGB(255, 204, 242, 255),
         elevation: 0,
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-          )
+        actions: <Widget>[
+          !searchState
+              ? IconButton(
+                  onPressed: () {
+                    _toggleSearch();
+                    _searchQuery("");
+                  },
+                  icon: const Icon(Icons.search),
+                )
+              : IconButton(
+                  onPressed: () {
+                    _toggleSearch();
+                    _searchQuery("");
+                  },
+                  icon: const Icon(Icons.cancel),
+                ),
         ],
       ),
       drawer: Drawer(
@@ -110,67 +108,104 @@ class _LightNovelPageState extends State<LightNovelPage> {
           ],
         ),
       ),
-      body: Center(
-        child: FutureBuilder(
-          future: futureNovel,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<LightNovel>> snapshot) {
-            if (snapshot.hasData) {
-              List<LightNovel>? mangas = snapshot.data;
-              return ListView(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                children: mangas!
-                    .map(
-                      (LightNovel manga) => InkWell(
-                          // onTap: () => null,
-                          child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
+      body: SafeArea(
+          child: FirebaseAnimatedList(
+        shrinkWrap: true,
+        query: ref,
+        itemBuilder: (BuildContext context, DataSnapshot snapshot,
+            Animation<double> animation, int index) {
+          Map<dynamic, dynamic> values =
+              snapshot.value as Map<dynamic, dynamic>;
+          if (values['name']
+              .toLowerCase()
+              .contains(searchQuery.toLowerCase())) {
+            return InkWell(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LightNovelDetail(lightnovel: values))),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(values["name"],
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            values['img'],
+                            width: 150,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(manga.title,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                manga.img,
-                                width: 150,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            ElevatedButton(
-                              onPressed: () => _launchURL(manga.url),
-                              child: const Text("Go to Website"),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const SizedBox(
-                              height: 1,
-                              width: double.infinity,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(color: Colors.grey),
-                              ),
-                            ),
+                            Wrap(
+                                direction: Axis.horizontal,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                alignment: WrapAlignment.center,
+                                children: [
+                                  for (var i = 0; i < values['tag'].length; i++)
+                                    Container(
+                                        height: 30,
+                                        decoration: const BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 204, 242, 255),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10),
+                                        margin: const EdgeInsets.all(3),
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Text(values['tag'][i]),
+                                        )),
+                                ]),
                           ],
                         ),
-                      )),
-                    )
-                    .toList(),
-              );
-            }
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
-      ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ListTile(
+                          subtitle: Text(
+                            values['synopsis'],
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return const SizedBox(
+              height: 10,
+            );
+          }
+        },
+      )),
     );
   }
 }
